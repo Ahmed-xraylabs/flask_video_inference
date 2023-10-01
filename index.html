@@ -2,19 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select File</title>
+    <title>YOLO Model Upload and Webcam Stream</title>
 </head>
 <body>
-    <h1>Select a File</h1>
-    <input type="file" id="fileInput">
-    <p id="filePath">File path will be displayed here.</p>
-
+    <h1>Upload YOLO Model</h1>
+    <form id="modelForm" action="http://127.0.0.1:3333/upload_yolo" method="POST" enctype="multipart/form-data">
+        <label for="model_file">Select a YOLO model file (.pt):</label><br>
+        <input type="file" name="model_file" accept=".pt" required><br><br>
+        <input type="submit" value="Upload Model">
+    </form>
+    <hr>
+    <h2>Image Frames:</h2>
+    <div id="imageContainer"></div>
     <script>
-        document.getElementById("fileInput").addEventListener("change", function() {
-            const selectedFile = this.value; // Get the "fake" path
-            document.getElementById("filePath").textContent = `Selected File Path: ${selectedFile}`;
+        const video = document.getElementById('video');
+        const modelForm = document.getElementById('modelForm');
+
+        modelForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            const image = document.createElement("img");
+            image.src = "http://127.0.0.1:3333/stream_yolo";
+            imageContainer.appendChild(image);
+
+            fetch('http://127.0.0.1:3333/upload_yolo', {
+                method: 'POST',
+                body: formData
+            })
+        
+            
         });
+
+        
     </script>
 </body>
 </html>
