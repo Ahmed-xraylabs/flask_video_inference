@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select File</title>
+</head>
+<body>
+    <h1>Select a File</h1>
+    <input type="file" id="fileInput">
+    <p id="filePath">File path will be displayed here.</p>
+
+    <script>
+        document.getElementById("fileInput").addEventListener("change", function() {
+            const selectedFile = this.value; // Get the "fake" path
+            document.getElementById("filePath").textContent = `Selected File Path: ${selectedFile}`;
+        });
+    </script>
+</body>
+</html>
