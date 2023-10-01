@@ -2,52 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>YOLO Model Uploader and Viewer</title>
+    <title>YOLO Model Upload and Webcam Stream</title>
 </head>
 <body>
-    <h1>YOLO Model Uploader and Viewer</h1>
-    <input type="file" id="fileInput" accept=".pt">
-    <button id="uploadButton">Upload Model</button>
-
+    <h1>Upload YOLO Model</h1>
+    <form id="modelForm" action="/upload_yolo" method="POST" enctype="multipart/form-data">
+        <label for="model_file">Select a YOLO model file (.pt):</label><br>
+        <input type="file" name="model_file" accept=".pt" required><br><br>
+        <input type="submit" value="Upload Model">
+    </form>
     <hr>
-
     <h2>Image Frames:</h2>
     <div id="imageContainer"></div>
-
     <script>
-        const fileInput = document.getElementById("fileInput");
-        const uploadButton = document.getElementById("uploadButton");
-        const imageContainer = document.getElementById("imageContainer");
+        const video = document.getElementById('video');
+        const modelForm = document.getElementById('modelForm');
 
-        uploadButton.addEventListener("click", () => {
-            const file = fileInput.files[0];
-            if (!file) {
-                alert("Please select a .pt file.");
-                return;
-            }
+        modelForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
 
-            const formData = new FormData();
-            formData.append("model", file);
-
-            fetch("http://127.0.0.1:3333/upload_yolo", {
-                method: "POST",
-                body: formData,
+            fetch('/upload_yolo', {
+                method: 'POST',
+                body: formData
             })
-            .then(response => {
-                if (response.ok) {
-                    // Success response, start displaying image frames
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                if (data === 'Model uploaded successfully') {
                     const image = document.createElement("img");
                     image.src = "http://127.0.0.1:3333/stream_yolo";
                     imageContainer.appendChild(image);
                 } else {
-                    alert("Error uploading the model.");
+                    alert('Error uploading model. Please try again.');
                 }
             })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred while uploading the model.");
-            });
+            .catch(error => console.error('Error uploading model:', error));
         });
+
+        
     </script>
 </body>
 </html>
