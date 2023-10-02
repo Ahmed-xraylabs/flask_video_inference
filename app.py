@@ -209,7 +209,8 @@ def webcam_yolo():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
-    camera.release()
+    ueye.is_FreeImageMem(hCam, pcImageMemory, MemID)
+    ueye.is_ExitCamera(hCam)
 
 def webcam_anom():
     hCam = ueye.HIDS(0)             #0: first available camera;  1-254: The camera with the specified camera ID
@@ -344,6 +345,8 @@ def webcam_anom():
         # Send the frame as a multipart response
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+    ueye.is_FreeImageMem(hCam, pcImageMemory, MemID)
+    ueye.is_ExitCamera(hCam)
 
 def webcam():
     hCam = ueye.HIDS(0)             #0: first available camera;  1-254: The camera with the specified camera ID
