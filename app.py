@@ -84,7 +84,7 @@ def upload_anom():
 def webcam_yolo():
     
     model = YOLO('yolo.pt')
-    hCam = ueye.HIDS(0)             #0: first available camera;  1-254: The camera with the specified camera ID
+    hCam = ueye.HIDS(0)  
     sInfo = ueye.SENSORINFO()
     cInfo = ueye.CAMINFO()
     pcImageMemory = ueye.c_mem_p()
