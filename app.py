@@ -7,6 +7,8 @@ import os
 from anomalib.deploy import TorchInferencer
 from anomalib.post_processing import Visualizer
 
+from pyueye import ueye
+
 app = Flask(__name__)
 
 # Initialize the YOLO model
