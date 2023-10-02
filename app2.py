@@ -7,7 +7,12 @@ import os
 from anomalib.deploy import TorchInferencer
 from anomalib.post_processing import Visualizer
 
+from flask_cors import CORS
+
+
 app = Flask(__name__)
+CORS(app)
+
 
 # Initialize the YOLO model
 model = None
