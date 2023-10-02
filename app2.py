@@ -95,6 +95,27 @@ def webcam_yolo():
 
     camera.release()
 
+def webcam():
+    camera = cv2.VideoCapture(0) 
+    
+     # 0 represents the default webcam
+    while True:
+        ret, frame = camera.read()
+        if not ret:
+            break
+           
+        # Process the frame with YOLO
+        
+
+        # Encode the annotated frame as JPEG
+        _, buffer = cv2.imencode('.jpg', frame)
+
+        # Send the frame as a multipart response
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+
+    camera.release()
+
 def webcam_anom():
     camera = cv2.VideoCapture(0) 
     inferencer = TorchInferencer(path='anom.pt', device='auto')
@@ -123,6 +144,10 @@ def stream_yolo():
 @app.route('/stream_anom')
 def stream_anom():
     return Response(webcam_anom(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/stream_webcam')
+def stream_webcam():
+    return Response(webcam(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=3333)
